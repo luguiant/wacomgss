@@ -1,0 +1,16 @@
+{
+    "name": "wacomgss-sdk-npm",
+    "version": "0.4.0",
+    "description": "WacomGSS-SDK-NPM",
+    "keywords": [],
+    "author": "Luguiant",
+    "license": "MIT",
+    "peerDependencies": {
+    },
+    "main": "build/index.js",
+    "files": [
+      "package.json",
+      "build"
+    ],
+    "dependencies": {}
+  }
