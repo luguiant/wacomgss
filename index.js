@@ -6,7 +6,7 @@
 //NOTE: Requires q lib https://github.com/kriskowal/q/raw/v1/q.js
 
 // global namespace
-const WacomGSS = WacomGSS || {};
+var WacomGSS = WacomGSS || {};
 
 // UTF-8 helper functions
 // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/btoa
