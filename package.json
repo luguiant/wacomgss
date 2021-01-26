@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "description": "WacomGSS-SDK-NPM",
   "keywords": [],
-  "author": "Luguiant",
+  "author": "luguiant",
   "license": "MIT",
   "peerDependencies": {},
   "main": "build/index.js",
