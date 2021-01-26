@@ -1,12 +1,12 @@
 {
   "name": "wacomgss-npm",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "WacomGSS-SDK-NPM",
   "keywords": [],
   "author": "luguiant",
   "license": "MIT",
   "peerDependencies": {},
-  "main": "src/index.js",
+  "main": "index.js",
   "dependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
