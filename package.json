@@ -1,16 +1,29 @@
 {
-    "name": "wacomgss-sdk-npm",
-    "version": "0.4.0",
-    "description": "WacomGSS-SDK-NPM",
-    "keywords": [],
-    "author": "Luguiant",
-    "license": "MIT",
-    "peerDependencies": {
-    },
-    "main": "build/index.js",
-    "files": [
-      "package.json",
-      "build"
-    ],
-    "dependencies": {}
-  }
+  "name": "@luguiant/wacomgss",
+  "version": "0.4.0",
+  "description": "WacomGSS-SDK-NPM",
+  "keywords": [],
+  "author": "Luguiant",
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com"
+  },
+  "license": "MIT",
+  "peerDependencies": {},
+  "main": "build/index.js",
+  "files": [
+    "package.json",
+    "build"
+  ],
+  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luguiant/wacomgss.git"
+  },
+  "bugs": {
+    "url": "https://github.com/luguiant/wacomgss/issues"
+  },
+  "homepage": "https://github.com/luguiant/wacomgss#readme"
+}
