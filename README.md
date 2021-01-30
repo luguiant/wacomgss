@@ -12,4 +12,8 @@ load the js files shown in the examples from the index.html, to access the funct
 
 Examples:
 
-[Wacom-Developer]: https://developer-docs.wacom.com/stu/docs/sigcaptx-guide#23-javascript-sdk-framework
+https://developer-docs.wacom.com/stu/docs/sigcaptx-guide#23-javascript-sdk-framework
+
+Documentation:
+
+https://developer-docs.wacom.com/stu/docs/sigcaptx-getting-started
