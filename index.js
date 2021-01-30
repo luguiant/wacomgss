@@ -30,21 +30,21 @@ WacomGSS.STUConstructor = (() => {
   let table = {};
   let stream = {};
   const checkExists = (obj) => {
-    return 'undefined' !== typeof obj;
+    'undefined' !== typeof obj;
   }
 
-  const getTicket = ()=> {
-    return ticketCount++;
+  const getTicket=() => {
+    ticketCount++;
   }
 
-  const getStream = ()=> {
-    return streamCount++;
+  const getStream = () => {
+    streamCount++;
   }
 
   // Constructor
-  const STU = (port) => {
-    let defPort = 9000;
-    let self = this;
+  let STU = (port) => {
+    var defPort = 9000;
+    var self = this;
     if(!checkExists(port))
     {
       port = defPort;
@@ -67,21 +67,21 @@ WacomGSS.STUConstructor = (() => {
 
   }
 
-  STU.prototype.Reinitialize = () => {
+  STU.prototype.Reinitialize = function() {
     WacomGSS.STU = new WacomGSS.STUConstructor();
   }
 
-  STU.prototype.isServiceReady = () => {
+  STU.prototype.isServiceReady = function() {
     return 1 == websocket.readyState;
   }
 
-  STU.prototype.isDCAReady = () => {
+  STU.prototype.isDCAReady = function() {
     var deferred = Q.defer();
     if(!WacomGSS.STU.isServiceReady()) {
       deferred.resolve(false);
     }
     else {
-      setTimeout( () => {
+      setTimeout(function () {
         if(deferred.promise.isPending()) {
           if(WacomGSS.STU.isServiceReady()) {
             WacomGSS.STU.close();
@@ -90,12 +90,12 @@ WacomGSS.STUConstructor = (() => {
         }
       }, 1000);
       WacomGSS.STU.getUsbDevices()
-        .then( (message) => {
+        .then( function(message) {
           if(deferred.promise.isPending()) {
             deferred.resolve(true);
           }
         })
-        .fail( (message) => {
+        .fail( function(message) {
           if(deferred.promise.isPending()) {
             deferred.resolve(true);
           }
@@ -104,14 +104,14 @@ WacomGSS.STUConstructor = (() => {
     return deferred.promise;
   }
 
-  STU.prototype.close = () => {
+  STU.prototype.close = function() {
     websocket.close();
   }
 
-  const receive = (message) => {
+  function receive(message) {
     if (typeof message.data !== 'undefined' && message.data != "") {
       //console.log("receive: " + message.data);
-      let arg = JSON.parse(message.data);
+      var arg = JSON.parse(message.data);
       if (checkExists(arg.ticket) && checkExists(table[arg.ticket])) {
         if (checkExists(arg.success) && true == arg.success && checkExists(arg.data)) {
           table[arg.ticket].resolve(arg.data);
@@ -134,25 +134,20 @@ WacomGSS.STUConstructor = (() => {
   }
 
   // sends unlimited sized message strings
-  const wsSend = (myString) => {
+  function wsSend(myString) {
     //console.log("Sending " + myString);
-    let length = myString.length;
-    let pos = 0;
+    var length = myString.length;
+    var pos = 0;
 
     while (pos < length)
     {
-      let header = (pos + MaxChunkSize < length)? "0" : "1";
-      let chunk = myString.substr(pos, MaxChunkSize);
+      var header = (pos + MaxChunkSize < length)? "0" : "1";
+      var chunk = myString.substr(pos, MaxChunkSize);
 
       websocket.send(header + chunk);
       pos += MaxChunkSize;
     }
   }
-
-  const get4DigitsHex = (number) => {
-    return ("0000" + number.toString(16)).substr(-4);
-  }
-
   // USB device Vendor ID for Wacom.
   STU.prototype.VendorId =
     {
@@ -173,12 +168,12 @@ WacomGSS.STUConstructor = (() => {
   STU.prototype.ProductId_min = 0x00a1;
   STU.prototype.ProductId_max = 0x00af
 
-  STU.prototype.send = (object) => {
-    let deferred = Q.defer();
+  STU.prototype.send = function(object) {
+    var deferred = Q.defer();
     try {
-      let ticket = getTicket();
+      var ticket = getTicket();
       object["ticket"] = ticket;
-      let str = JSON.stringify(object);
+      var str = JSON.stringify(object);
       wsSend(str);
       table[ticket] = deferred;
       //console.log("send: " + JSON.stringify(object));
@@ -188,23 +183,23 @@ WacomGSS.STUConstructor = (() => {
     return deferred.promise;
   }
 
-  STU.prototype.sendNoReturn = (object) => {
-    let str = JSON.stringify(object);
+  STU.prototype.sendNoReturn = function(object) {
+    var str = JSON.stringify(object);
     wsSend(str);
     //console.log("send: " + str);
   }
 
-  STU.prototype.setStream = (functor) => {
-    let streamId = getStream();
+  STU.prototype.setStream = function(functor) {
+    var streamId = getStream();
     stream[streamId] = functor;
     return streamId;
   }
 
-  STU.prototype.removeStream = (streamId) => {
+  STU.prototype.removeStream = function(streamId) {
     delete stream[streamId];
   }
 
-  STU.prototype.getUsbDevices = () => {
+  STU.prototype.getUsbDevices = function() {
     return WacomGSS.STU.send
     ({
       "scope": "WacomGSS.STU.GetUsbDevices",
@@ -212,7 +207,7 @@ WacomGSS.STUConstructor = (() => {
     });
   }
 
-  STU.prototype.getTlsDevices =  () => {
+  STU.prototype.getTlsDevices = function () {
     return WacomGSS.STU.send
     ({
       "scope": "WacomGSS.STU.GetTlsDevices",
@@ -220,7 +215,7 @@ WacomGSS.STUConstructor = (() => {
     });
   }
 
-  STU.prototype.isSupportedUsbDevice =  (idVendor, idProduct) => {
+  STU.prototype.isSupportedUsbDevice = function (idVendor, idProduct) {
     return WacomGSS.STU.send
     ({
       "scope": "WacomGSS.STU.GetUsbDevices",
@@ -229,9 +224,12 @@ WacomGSS.STUConstructor = (() => {
       "idProduct": idProduct
     });
   }
-
   // usbDevice type is UsbDevice
-  STU.prototype.getStringUsbDevice = (usbDevice) => {
+  STU.prototype.getStringUsbDevice = function(usbDevice) {
+    function get4DigitsHex(number) {
+      return ("0000" + number.toString(16)).substr(-4);
+    }
+
     return get4DigitsHex(usbDevice.idVendor)  + ":" +
       get4DigitsHex(usbDevice.idProduct) + ":" +
       get4DigitsHex(usbDevice.bcdDevice);
@@ -248,7 +246,7 @@ WacomGSS.STUConstructor = (() => {
         }
     }
 
-  STU.prototype.getSerialPorts = () => {
+  STU.prototype.getSerialPorts = function() {
     return WacomGSS.STU.send
     ({
       "scope": "WacomGSS.STU.GetSerialPorts",
@@ -256,27 +254,27 @@ WacomGSS.STUConstructor = (() => {
     });
   }
 
-  STU.prototype.UsbInterface = (() => {
+  STU.prototype.UsbInterface = (function() {
 
     var scope = "WacomGSS.STU.UsbInterface";
     var id = "";
     // Constructor
-    const UsbInterface = () => {
+    function UsbInterface() {
     }
 
-    UsbInterface.prototype.Constructor = () => {
+    UsbInterface.prototype.Constructor = function () {
       return WacomGSS.STU.send
       ({
         "scope": scope,
         "function": "Constructor"
       })
-        .then( (message) => {
+        .then( function(message) {
           id = message.id;
           return message;
         });
     }
 
-    UsbInterface.prototype.connect = (usbDevice, exclusiveLock) => {
+    UsbInterface.prototype.connect = function(usbDevice, exclusiveLock) {
       return WacomGSS.STU.send
       ({
         "scope": scope,
@@ -287,11 +285,11 @@ WacomGSS.STUConstructor = (() => {
       });
     }
 
-    UsbInterface.prototype.toJSON = () => {
+    UsbInterface.prototype.toJSON = function() {
       return {"id": id, "scope": scope};
     }
 
-    UsbInterface.prototype.disconnect = () => {
+    UsbInterface.prototype.disconnect = function() {
       return WacomGSS.STU.send
       ({
         "scope": scope,
@@ -300,7 +298,7 @@ WacomGSS.STUConstructor = (() => {
       });
     }
 
-    UsbInterface.prototype.isConnected = () => {
+    UsbInterface.prototype.isConnected = function() {
       return WacomGSS.STU.send
       ({
         "scope": scope,
@@ -309,7 +307,7 @@ WacomGSS.STUConstructor = (() => {
       });
     }
 
-    UsbInterface.prototype.queueNotifyAll = () => {
+    UsbInterface.prototype.queueNotifyAll = function() {
       return WacomGSS.STU.send
       ({
         "scope": scope,
@@ -318,7 +316,7 @@ WacomGSS.STUConstructor = (() => {
       });
     }
     // predicate type is Boolean
-    UsbInterface.prototype.queueSetPredicateAll = (predicate) => {
+    UsbInterface.prototype.queueSetPredicateAll = function(predicate) {
       return WacomGSS.STU.send
       ({
         "scope": scope,
@@ -328,7 +326,7 @@ WacomGSS.STUConstructor = (() => {
       });
     }
     // length type is an integer
-    UsbInterface.prototype.get = (length) => {
+    UsbInterface.prototype.get = function(length) {
       return WacomGSS.STU.send // returns a Base64-encoded string
         ({
           "scope": scope,
@@ -338,7 +336,7 @@ WacomGSS.STUConstructor = (() => {
         });
     }
     // base64Data is a base64-encoded image string, or a DataStore reference to it
-    UsbInterface.prototype.set = (base64Data) => {
+    UsbInterface.prototype.set = function(base64Data) {
       return WacomGSS.STU.send
       ({
         "scope": scope,
@@ -348,7 +346,7 @@ WacomGSS.STUConstructor = (() => {
       });
     }
 
-    UsbInterface.prototype.supportsWrite = () => {
+    UsbInterface.prototype.supportsWrite = function() {
       return WacomGSS.STU.send
       ({
         "scope": scope,
