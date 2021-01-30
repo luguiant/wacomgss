@@ -6,43 +6,43 @@
 //NOTE: Requires q lib https://github.com/kriskowal/q/raw/v1/q.js
 
 // global namespace
-let WacomGSS = WacomGSS || {};
+var WacomGSS = WacomGSS || {};
 
 // UTF-8 helper functions
 // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/btoa
 // Note: btoa and atob are not supported on IE 9 or lower
-const utf8_to_b64 = (str) => {
+function utf8_to_b64(str) {
   return window.btoa(unescape(encodeURIComponent(str)));
 }
 
-const b64_to_utf8 = (str) => {
+function b64_to_utf8(str) {
   return decodeURIComponent(escape(window.atob(str)));
 }
 
 WacomGSS.STUConstructor = (() => {
 
-  let websocket;
+  var websocket;
 
-  let MaxChunkSize = 65535; // size of chunks to split the message into
+  var MaxChunkSize = 65535; // size of chunks to split the message into
 
-  let ticketCount = 0;
-  let streamCount = 0;
-  let table = {};
-  let stream = {};
-  const checkExists = (obj) => {
-    'undefined' !== typeof obj;
+  var ticketCount = 0;
+  var streamCount = 0;
+  var table = {};
+  var stream = {};
+  function checkExists(obj) {
+    return 'undefined' !== typeof obj;
   }
 
-  const getTicket=() => {
-    ticketCount++;
+  function getTicket() {
+    return ticketCount++;
   }
 
-  const getStream = () => {
-    streamCount++;
+  function getStream() {
+    return streamCount++;
   }
 
   // Constructor
-  let STU = (port) => {
+  function STU(port) {
     var defPort = 9000;
     var self = this;
     if(!checkExists(port))
@@ -54,11 +54,11 @@ WacomGSS.STUConstructor = (() => {
 
     websocket = new WebSocket("wss://localhost:" + port.toString() + "/ws");
 
-    websocket.onopen = () => {
+    websocket.onopen = function() {
       console.log("connected");
     }
     websocket.onmessage = receive;
-    websocket.onclose = () => {
+    websocket.onclose = function() {
       console.log("disconnected");
       if (typeof self.onDCAtimeout === "function") {
         self.onDCAtimeout();
