@@ -1,6 +1,6 @@
 {
   "name": "wacomgss-npm",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "WacomGSS-SDK-NPM",
   "keywords": ["wgssStuSdk", "angular", "ng-wgssStuSdk", "wgssStuSdk npm", "wacomgss", "wacom", "Wacom for Developers", "wacom npm"],
   "author": "luguiant <mauriciogmona@gmail.com> (https://github.com/luguiant)",
